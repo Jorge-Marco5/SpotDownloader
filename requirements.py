@@ -1,14 +1,17 @@
 import subprocess
 import sys
 from colorama import Fore, init
+import os
 init()
 
 def instalar_paquetes():
     crear_archivo_env()
-
     try:
+        print("\nIniciando descarga de los paquetes. Esto puede tomar tiempo...\n")
         # Ejecuta el comando pip para instalar los paquetes
-        subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r','requirements.txt'])
+        subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt'])
+        if not os.path.exists("music"):
+            os.mkdir("music")
         print(Fore.GREEN+"¡Todos los paquetes han sido instalados correctamente!")
         print("Ejecuta el comando 'python main.py' para empezar a descargar tu musica")
     except FileNotFoundError:
@@ -54,7 +57,7 @@ def main():
     print(Fore.WHITE +"Recuerda que preferiblemente descargues audios y videos que te pertenezcan o a los que tengas permiso.")
     print("Eres libre de hacer lo que gustes, el uso de este script es bajo TU RESPONSABILIDAD\n")
     print("Si tienes problemas con la instalación, asegúrate de tener pip instalado y actualizado.")
-    print("apt install python3-dev build-essential\n")
+    print("apt install python3 build-essential\n")
     print("Este script instalará los siguientes paquetes necesarios y configuraciones para ejecutar el proyecto.\n")
     #mostrar los paquetes a instalar de requirements.txt
     with open("requirements.txt", "r", encoding="utf-8") as archivo:
