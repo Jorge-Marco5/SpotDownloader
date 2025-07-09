@@ -1,5 +1,3 @@
-print("Descarga de musica")
-
 import os
 import spotipy
 import requests
@@ -11,7 +9,10 @@ from mutagen.easyid3 import EasyID3
 from mutagen.mp3 import MP3
 from mutagen.id3 import ID3, APIC, error
 import re
+from colorama import Fore, init
+init()
 
+print(Fore.CYAN +"SpotDownloader"+Fore.WHITE)
 load_dotenv()  # Carga de el archivo de variables de entorno
 
 #DATOS DE CLIENTE SPOTIFY for DEVELOPERS
@@ -174,7 +175,7 @@ def main():
 
 #Funcion de descarga de la playlist
 def downloadPlaylist():
-    print("Descargar playlist")
+    print(Fore.CYAN+"\nDescargar playlist"+Fore.WHITE)
     playlist_url = input("Ingresa la URL de spotify: ")
     songs, playlist_name = get_playlist_songs(playlist_url)
 
@@ -189,8 +190,7 @@ def downloadPlaylist():
     for song in songs:
         search_and_download(song['name'], song['artist'], folder_name)
 
-    print(f"Canciones descargadas en la carpeta: {folder_name}")
-
+    print(Fore.GREEN+f"Canciones descargadas en la carpeta: {folder_name}"+Fore.WHITE)
     main_menu = input("¿Deseas volver al menú principal? (s/n): ")
     if main_menu.lower() == 's':
         main()
@@ -202,14 +202,14 @@ def downloadTrack():
     """
     Obtiene la URL de una canción de Spotify, la procesa y la descarga.
     """
-    print("Descargar canción 🎵")
+    print("\nDescargar canción 🎵")
     track_url = input("Ingresa la URL de Spotify: ")
 
     # Asumimos que get_song devuelve el objeto completo de la canción y su nombre
     track = get_song(track_url)
 
     if not track:
-        print("No se pudo obtener la información de la canción.")
+        print(Fore.RED+"No se pudo obtener la información de la canción."+Fore.WHITE)
         return
 
     # Extraer los datos directamente del objeto 'track'
@@ -226,17 +226,17 @@ def downloadTrack():
         os.mkdir(folder_name)
 
     # Descargar canción (sin bucle)
-    print(f"Iniciando descarga de '{track_name}' - {artist_name}...")
+    print(Fore.CYAN+f"Iniciando descarga de '{track_name}' - {artist_name}..."+Fore.WHITE)
     search_and_download(track_name, artist_name, folder_name)
     #aplicar metadatos de cada cancion
     aplicarMetadatos(folder_name, track)
-    print("¡Descarga completada!")
+    print(Fore.GREEN+"¡Descarga completa!")
 
-    main_menu = input("¿Deseas volver al menú principal? (s/n): ")
+    main_menu = input(Fore.WHITE+"¿Deseas volver al menú principal? (s/n): ")
     if main_menu.lower() == 's':
         main()
     else:
-        print("Saliendo del programa. ¡Hasta luego!")
+        print(Fore.CYAN+"Saliendo del programa. ¡Hasta luego!")
 
 if __name__ == "__main__":
     main()
