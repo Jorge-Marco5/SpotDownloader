@@ -4,7 +4,6 @@ import requests
 from dotenv import load_dotenv
 from spotipy.oauth2 import SpotifyClientCredentials
 import yt_dlp
-import pandas as pd
 from mutagen.easyid3 import EasyID3
 from mutagen.mp3 import MP3
 from mutagen.id3 import ID3, APIC, error
@@ -86,13 +85,6 @@ def search_and_download(song, artist, folder_name):
             print(f"Downloaded: {song}")
         except Exception as e:
             print(f"Failed to download {song}: {e}")
-
-
-def save_to_csv(songs, playlist_name):
-    """Save the playlist details to a CSV file."""
-    df = pd.DataFrame(songs)
-    df.to_csv(f"{playlist_name}.csv", index=False)
-    print(f"Saved playlist to {playlist_name}.csv")
 
 #Funcion para aplicar los metadatos a la cancion descargada
 def aplicarMetadatos(folder_name, track):

@@ -5,28 +5,12 @@ init()
 
 def instalar_paquetes():
     crear_archivo_env()
-    platform = None
-    print(Fore.WHITE)
-    plataforma = input("¿En qué plataforma estás ejecutando este script? (1-windows/2-linux): ").strip().lower()
-    if plataforma == '1':
-        platform  = "win_amd64"
-    elif plataforma == '2':
-        platform = "manylinux_2_17_x86_64"
 
     try:
-        # Verifica si existe el archivo requirements.txt
-        with open('requirements.txt', 'r') as file:
-            print(Fore.GREEN+"\nInstalando paquetes desde requirements.txt, esto puede tomar un tiempo...\n")
-            print(Fore.WHITE)
-            #descargar plataforma especifica de pip
-            if platform:
-                print(Fore.CYAN+f"Descargando pip para la plataforma {platform}...\n")
-                subprocess.check_call([sys.executable, '-m', 'pip', 'install', f'pip==23.2.1+{platform}'])
-
-            # Ejecuta el comando pip para instalar los paquetes
-            subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r','requirements.txt'])
-            print(Fore.GREEN+"¡Todos los paquetes han sido instalados correctamente!")
-            print("Ejecuta el comando 'python main.py' para empezar a descargar tu musica")
+        # Ejecuta el comando pip para instalar los paquetes
+        subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r','requirements.txt'])
+        print(Fore.GREEN+"¡Todos los paquetes han sido instalados correctamente!")
+        print("Ejecuta el comando 'python main.py' para empezar a descargar tu musica")
     except FileNotFoundError:
         print(Fore.RED+"Error: No se encontró el archivo 'requirements.txt'. Asegúrate de que esté en el directorio actual.")
         print(Fore.WHITE)
@@ -70,6 +54,7 @@ def main():
     print(Fore.WHITE +"Recuerda que preferiblemente descargues audios y videos que te pertenezcan o a los que tengas permiso.")
     print("Eres libre de hacer lo que gustes, el uso de este script es bajo TU RESPONSABILIDAD\n")
     print("Si tienes problemas con la instalación, asegúrate de tener pip instalado y actualizado.")
+    print("apt install python3-dev build-essential\n")
     print("Este script instalará los siguientes paquetes necesarios y configuraciones para ejecutar el proyecto.\n")
     #mostrar los paquetes a instalar de requirements.txt
     with open("requirements.txt", "r", encoding="utf-8") as archivo:
