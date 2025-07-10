@@ -4,11 +4,9 @@ import requests
 from dotenv import load_dotenv
 from spotipy.oauth2 import SpotifyClientCredentials
 import yt_dlp
-from mutagen.easyid3 import EasyID3
-from mutagen.mp3 import MP3
-from mutagen.id3 import ID3, APIC, error
-import re
 from colorama import Fore, init
+from sanitize import sanitize_filename
+from metadata import aplicarMetadatos
 init()
 
 print(Fore.CYAN +"SpotDownloader"+Fore.WHITE)
@@ -17,9 +15,6 @@ load_dotenv()  # Carga de el archivo de variables de entorno
 #DATOS DE CLIENTE SPOTIFY for DEVELOPERS
 SPOTIFY_CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
 SPOTIFY_CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
-
-def sanitize_filename(name):
-        return re.sub(r'[\\/*?:"<>|]', "", name)
 
 #Obtener los datos de la playlist
 def get_playlist_songs(playlist_url):
@@ -82,81 +77,19 @@ def search_and_download(song, artist, folder_name):
     with yt_dlp.YoutubeDL(options) as ydl:
         try:
             ydl.download([f"ytsearch1:{query}"])
-            print(f"Downloaded: {song}")
+            print(f"Pista descargada: {song}")
         except Exception as e:
-            print(f"Failed to download {song}: {e}")
+            print(f"Fallo al descargar: {song}: {e}")
 
 #Funcion para aplicar los metadatos a la cancion descargada
-def aplicarMetadatos(folder_name, track):
-    # ruta de la cancion: music/{track_name} - {artist_name}/{track_name}.mp3
-    # ruta de la caratula: music/{track_name} - {artist_name}/{titulo} - {artista}.jpg
-    """Apply metadata and cover art to the downloaded audio file."""
-    titulo = sanitize_filename(track['name'])
-    artista = sanitize_filename(track['artists'][0]['name'])
-    album = sanitize_filename(track.get('album', {}).get('name', 'Unknown Album'))
-    genero = sanitize_filename(track.get('album', {}).get('genres', ['Unknown Genre'])[0]) if 'album' in track else 'Unknown Genre'
-    # Aseguramos que el título y el artista no contengan caracteres no válidos para nombres de archivos
-    mp3_file = os.path.join(folder_name, f"{titulo}.mp3")#Ruta del archivo mp3
-    print("Aplicando metadatos a : "+f"{titulo}.mp3")
 
-    # Descargar carátula de la canción
-    cover_url = None
-    if 'album' in track and 'images' in track['album'] and len(track['album']['images']) > 0:
-        cover_url = track['album']['images'][0]['url']
-
-    cover_path = None
-    if cover_url:
-        # La ruta de la carátula debe ser: music/{track_name} - {artist_name}/{titulo} - {artista}.jpg
-        cover_path = os.path.join(folder_name, f"{titulo} - {artista}.jpg")
-        descargarCaratula(cover_url, cover_path)
-    #aplicar metadatos a la pista
-    try:
-        audio = EasyID3(mp3_file)
-    except Exception:
-        audio = MP3(mp3_file, ID3=ID3)
-        audio.add_tags()
-        audio = EasyID3(mp3_file)
-
-    audio["title"] = track['name']
-    audio["artist"] = track['artists'][0]['name']
-    audio["album"] = track.get('album', {}).get('name', 'Unknown Album')
-    audio["genre"] = genero
-    audio.save()
-
-    if cover_path and os.path.exists(cover_path):
-        audio = MP3(mp3_file, ID3=ID3)
-        with open(cover_path, "rb") as img:
-            audio.tags.add(
-                APIC(
-                    encoding=3,
-                    mime="image/jpeg",
-                    type=3,
-                    desc="Cover",
-                    data=img.read(),
-                )
-            )
-        audio.save()
-        print("Metadatos actualizados correctamente.")
-    else:
-        print("Metadatos actualizados (sin carátula).")
-
-#descargar caratula de la pista descargada
-def descargarCaratula(url, cover_path):
-    """Download cover art and save to the specified path."""
-    try:
-        respuesta = requests.get(url, stream=True)
-        respuesta.raise_for_status()
-        with open(cover_path, 'wb') as archivo:
-            for chunk in respuesta.iter_content(1024):
-                archivo.write(chunk)
-        return cover_path
-    except Exception as e:
-        print(f"Error al descargar la imagen: {e}")
-        return None
 
 #Funcion principal
 def main():
-    opcion = int(input("¿Que deseas descargar? [1 playlist| 2 cancion]: "))
+    #Opcion para escoger descarga de youtube o de spotify
+
+    #opcion para escoger entre descarga de playlist o una cancion
+    opcion = int(input("¿Que deseas descargar? [1-playlist| 2-cancion]: "))
     match opcion:
         case 1:
            downloadPlaylist()
@@ -220,8 +153,12 @@ def downloadTrack():
     # Descargar canción (sin bucle)
     print(Fore.CYAN+f"Iniciando descarga de '{track_name}' - {artist_name}..."+Fore.WHITE)
     search_and_download(track_name, artist_name, folder_name)
+    print(Fore.GREEN+"¡Pista descargada!, Aplicando metadatos a: '{track_name}'.mp3"+Fore.WHITE)
+
     #aplicar metadatos de cada cancion
-    aplicarMetadatos(folder_name, track)
+    metadatos = aplicarMetadatos(folder_name, track)
+    metadatos.run()
+
     print(Fore.GREEN+"¡Descarga completa!")
 
     main_menu = input(Fore.WHITE+"¿Deseas volver al menú principal? (s/n): ")
