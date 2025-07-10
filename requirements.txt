@@ -4,4 +4,5 @@ requests==2.32.4
 spotipy==2.25.1
 yt_dlp==2025.6.30
 ffmpeg==1.4.0
+ffmpeg-python==0.2.0
 os-sys==0.2.1
