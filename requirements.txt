@@ -1,9 +1,6 @@
+colorama==0.4.6
 mutagen==1.47.0
 python-dotenv==1.1.1
-requests==2.32.4
+Requests==2.32.4
 spotipy==2.25.1
 yt_dlp==2025.6.30
-ffmpeg==1.4.0
-ffmpeg-python==0.2.0
-os-sys==2.1.4
-colorama==0.4.6
