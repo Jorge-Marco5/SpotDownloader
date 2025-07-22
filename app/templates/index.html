@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculadora</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='js/funciones.js') }}"></script>
+</head>
+<body>
+    <h2 class="text1">¿De que plataforma deseas descargar?</h2>
+    <div>
+        <button>
+            <i class="fa fa-spotify" aria-hidden="true"></i>
+            Spotify
+        </button>
+        <button>
+            <i class="fa fa-youtube" aria-hidden="true"></i>
+            YouTube
+        </button>
+    </div>
+</body>
+</html>

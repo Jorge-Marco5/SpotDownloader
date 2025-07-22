@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+
+        <meta charset="UTF-8">
+        <title>{{audio_file}}</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <script src="{{ url_for('static', filename='js/funciones.js') }}"></script>
+        <!--
+            1-Obtener la url de la cancion o video
+            2-Obtener la caratula y nombre de la cancion
+            3-Descargar la cancion en la calidad seleccionada
+            -->
+    </head>
+<body class="" style="margin: 0;">
+    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100vh; background-color: black; margin: 0; padding: 20px;">
+    {% if audio_file%}
+    <audio controls>
+        <source src="{{url_for('static', filename = "music/"+audio_file+".mp3")}}" type="audio/mpeg">
+        Tu navegador no soporta la reproducción de audio.
+    </audio>
+    <button class="btn txt-large" style="width: 20%; height: 50px; margin: 20px 0 20px 0;" onclick="location.href='/DYT'">Regresar al inicio</button>
+    {% endif %}
+    </div>
+</body>
+</html>
