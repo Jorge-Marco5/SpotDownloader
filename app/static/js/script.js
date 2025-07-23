@@ -19,12 +19,18 @@ youtubeUrlInput.addEventListener('input', function () {
     // Mostrar el elemento de resultado para dar feedback
     result.style.display = 'block';
     if (youtubeRegex.test(url)) {
-        result.textContent = '✅ URL válida';
-        result.style.color = 'green';
+        off = document.getElementById('Buscar')
+        off.style.cursor = 'value';
+        off.style.display = "Block";
+        off.style.opacity = '1';
     } else {
         result.textContent = '❌ URL no válida de YouTube';
         result.style.color = 'red';
         result.style.margin = '20px 0 20px 0';
+        off = document.getElementById('Buscar')
+        off.style.display = "None";
+        off.style.opacity = '0.5';
+        off.style.cursor = 'not-allowed';
     }
 });
 
@@ -50,17 +56,6 @@ urlForm.addEventListener('submit', function (e) {
     }
 });
 
-    function mensajeDescarga(){
-        let mensaje = document.getElementById("Alerta");
-        mensaje.style.display = "none";
-    }
-    function msgCargando(){
-        let mensaje = document.getElementById("Alerta");
-        mensaje.style.display = "block";
-        mensaje.textContent = "Convirtiendo, espere un momento...";
-    }
-
-    mensajeDescarga();
 //Muestra el mensaje buscando
     function mensajeBuscandoInactivo(){
         let buscando = document.getElementById("mensajeBuscando");
@@ -74,6 +69,19 @@ urlForm.addEventListener('submit', function (e) {
     }
 
     mensajeBuscandoInactivo();
+
+    
+    function mensajeDescarga(){
+        let mensaje = document.getElementById("Alerta");
+        mensaje.style.display = "none";
+    }
+    function msgCargando(){
+        let mensaje = document.getElementById("Alerta");
+        mensaje.style.display = "block";
+        mensaje.textContent = "Convirtiendo, espere un momento...";
+    }
+
+    mensajeDescarga();
 
         const audioFileInput = document.getElementById('audioFile');
         const audioPlayer = document.getElementById('audioPlayer');

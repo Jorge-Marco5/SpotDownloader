@@ -5,7 +5,6 @@
         <title>SpotDownloader</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-        <script src="{{ url_for('static', filename='js/funciones.js') }}"></script>
         <!--
             1-Obtener la url de la cancion o video
             2-Obtener la caratula y nombre de la cancion
@@ -37,10 +36,12 @@
             </div>
         </div>
         <!--Validar la URL que se ingresa-->
+        <div class="forms">
         <form action="/info" method="post">
             <input class="input" type="url" name="url" placeholder="URL" id="youtubeUrl" step="any" required>
-            <button class="btn" type="submit">Buscar</button>
+            <button class="btn" id="Buscar" type="submit" onclick="mensajeBuscandoActive()">Buscar</button>
         </form>
+        </div>
         <span id="result"></span>
 
 {% if mostrar_contenido %}
@@ -58,17 +59,17 @@
             <form action="/descargar" method="post">
                 <input value="{{url}}" name="url" hidden>
                 <input value="320" name="quality" hidden>
-                <dt class="listOption"><span class="msg-accept txt-xxsmall">Mejor Calidad</span><span>mp3</span><span>320kbps</span><button class="btn" type="submit" onclick="msgCargando()">descargar</button></dt>
+                <dt class="listOption"><span class="msg-accept txt-xxsmall">Mejor Calidad</span><span>mp3</span><span>320kbps</span><button class="btn" type="submit" onclick="msgCargando()">Descargar</button></dt>
             </form>
             <form action="/descargar" method="post">
                 <input value="{{url}}" name="url" hidden>
                 <input value="256" name="quality" hidden>
-                <dt class="listOption"><span>mp3</span><span>256kbps</span><button class="btn" type="submit" onclick="msgCargando()">descargar</button></dt>
+                <dt class="listOption"><span class="msg-warning txt-xxsmall">equilibrado</span><span>mp3</span><span>256kbps</span><button class="btn" type="submit" onclick="msgCargando()">Descargar</button></dt>
             </form>
             <form action="/descargar" method="post">
                 <input value="{{url}}" name="url" hidden>
                 <input value="128" name="quality" hidden>
-                <dt class="listOption"><span>mp3</span><span>128kbps</span><button class="btn" type="submit" onclick="msgCargando()">descargar</button></dt>
+                <dt class="listOption"><span class="msg-danger txt-xxsmall">Menor calidad</span><span>mp3</span><span>128kbps</span><button class="btn" type="submit" onclick="msgCargando()">Descargar</button></dt>
             </form>
         </ul>
     </div>
@@ -76,7 +77,9 @@
 {% else %}
         <p></p>
 {% endif %}
-
+<div class="content" style="width: 100%;">
+    <p></p>
+</div>
 </body>
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
