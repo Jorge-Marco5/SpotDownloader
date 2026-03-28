@@ -1,27 +1,61 @@
-<!DOCTYPE html>
-<html lang="es">
-    <head>
+{% extends "base.html" %}
 
-        <meta charset="UTF-8">
-        <title>{{audio_file}}</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-        <script src="{{ url_for('static', filename='js/funciones.js') }}"></script>
-        <!--
-            1-Obtener la url de la cancion o video
-            2-Obtener la caratula y nombre de la cancion
-            3-Descargar la cancion en la calidad seleccionada
-            -->
-    </head>
-<body class="" style="margin: 0;">
-    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100vh; background-color: black; margin: 0; padding: 20px;">
-    {% if audio_file%}
-    <audio controls>
-        <source src="{{url_for('static', filename = "music/"+audio_file+".mp3")}}" type="audio/mpeg">
-        Tu navegador no soporta la reproducción de audio.
-    </audio>
-    <button class="btn txt-large" style="width: 20%; height: 50px; margin: 20px 0 20px 0;" onclick="location.href='/DYT'">Regresar al inicio</button>
-    {% endif %}
+{% block title %}SpotDownloader - {{ audio_file }}{% endblock %}
+
+{% block content %}
+<section class="glass-card" style="text-align: center; padding: 4rem 2rem;">
+    <div
+        style="background: rgba(255, 255, 255, 0.05); padding: 3rem; border-radius: 30px; border: 1px solid var(--glass-border);">
+        <i class="fa fa-check-circle" style="font-size: 5rem; color: var(--accent-sp); margin-bottom: 2rem;"></i>
+        <h1 class="Title" style="font-size: 2rem; margin-bottom: 0.5rem;">¡Descarga Lista!</h1>
+        <p style="color: var(--text-secondary); margin-bottom: 2.5rem;">{{ audio_file }}</p>
+
+        <div style="width: 100%; max-width: 500px; margin: 0 auto 2.5rem auto;">
+            {% if audio_file.endswith('.mp4') %}
+            <video controls style="width: 100%; border-radius: 12px; box-shadow: var(--shadow-lg);">
+                <source src="{{ url_for('static', filename='videos/' + audio_file) }}" type="video/mp4">
+                Tu navegador no soporta la reproducción de video.
+            </video>
+            {% else %}
+            <audio controls style="width: 100%; filter: invert(1) hue-rotate(180deg);">
+                <source src="{{ url_for('static', filename='music/' + audio_file) }}" type="audio/mpeg">
+                Tu navegador no soporta la reproducción de audio.
+            </audio>
+            {% endif %}
+        </div>
+
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <a href="/" class="btn-primary" style="text-decoration: none; padding: 1rem 2rem;">
+                <i class="fa fa-home"></i> Inicio
+            </a>
+
+            <!-- Botón de Retorno Inteligente -->
+            <form action="{% if audio_file.endswith('.mp4') %}/get_formats{% else %}/info{% endif %}" method="post" style="width: auto; margin: 0;">
+                <input type="hidden" name="url" value="{{ url }}">
+                <button type="submit" class="btn-download" style="padding: 1rem 2rem; border-color: var(--accent-sp); color: var(--accent-sp);">
+                    <i class="fa fa-arrow-left"></i> Volver a Resultados
+                </button>
+            </form>
+
+            {% if not audio_file.endswith('.mp4') %}
+            <a href="{{ url_for('static', filename='music/' + audio_file) }}" download class="btn-download"
+                style="padding: 1rem 2rem; border-color: var(--text-primary);">
+                <i class="fa fa-download"></i> Descargar de nuevo
+            </a>
+            {% else %}
+            <a href="{{ url_for('static', filename='videos/' + audio_file) }}" download class="btn-download"
+                style="padding: 1rem 2rem; border-color: var(--text-primary);">
+                <i class="fa fa-download"></i> Descargar de nuevo
+            </a>
+            {% endif %}
+        </div>
     </div>
-</body>
-</html>
+</section>
+
+<style>
+    /* Estilo personalizado para el reproductor de audio en modo oscuro */
+    audio::-webkit-media-controls-enclosure {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+</style>
+{% endblock %}

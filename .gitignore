@@ -1,1 +1,7 @@
 .app/__pycache__/
+music/
+videos/
+.env
+.cache
+__pycache__/
+venv
