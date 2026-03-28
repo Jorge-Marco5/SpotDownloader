@@ -59,7 +59,7 @@ def limpiar_archivos_temporales():
     """
     Elimina archivos de las carpetas de música y video que superen MAX_FILE_AGE.
     """
-    directorios = ["app/static/music", "app/static/videos"]
+    directorios = ["src/static/music", "src/static/videos"]
     ahora = time.time()
     
     for directorio in directorios:
@@ -99,7 +99,7 @@ def descargar_audio_yt(url, format_id):
             'preferredcodec': "mp3",
             'preferredquality': '320', # Calidad base de conversión
         }],
-        'outtmpl': f"app/static/music/{titulo_limpio}.%(ext)s",
+        'outtmpl': f"src/static/music/{titulo_limpio}.%(ext)s",
         'quiet': True,
         'no_warnings': True,
     }
@@ -160,11 +160,39 @@ def obtener_formatos_audio(url):
                 pass
             return 0
 
+        fix_formats= [
+            {
+                "id": "248",
+                "ext": "mp3",
+                "bitrate": "160 kbps",
+                "size": "-"
+            },
+            {
+                "id": "249",
+                "ext": "mp3",
+                "bitrate": "192 kbps",
+                "size": "-"
+            },
+            {
+                "id": "250",
+                "ext": "mp3",
+                "bitrate": "256 kbps",
+                "size": "-"
+            },
+            {
+                "id": "251",
+                "ext": "mp3",
+                "bitrate": "320 kbps",
+                "size": "-"
+            },
+        ]
+
         for fmt in sorted(lista_formatos, key=sort_key, reverse=True):
             if fmt["bitrate"] not in vistos:
                 resultado.append(fmt)
                 vistos.add(fmt["bitrate"])
-                
+        
+        resultado.extend(fix_formats)
         return resultado
 
 def obtener_formatos_video(url):
@@ -217,12 +245,12 @@ def descargar_video_yt(url, format_id):
     titulo_limpio = sanitizar_nombre_archivo(titulo)
     
     # Asegurar que la carpeta de videos existe
-    os.makedirs("app/static/videos", exist_ok=True)
+    os.makedirs("src/static/videos", exist_ok=True)
     
     opciones = {
         'format': f"{format_id}+bestaudio/best", # Combina video seleccionado con mejor audio
         'merge_output_format': 'mp4',
-        'outtmpl': f"app/static/videos/{titulo_limpio}.%(ext)s",
+        'outtmpl': f"src/static/videos/{titulo_limpio}.%(ext)s",
         'quiet': True,
         'no_warnings': True,
     }
