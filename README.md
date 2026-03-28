@@ -1,69 +1,63 @@
+# SP_PlaylistDownloader
 
-# SpotDownloader
+Script de Python para descargar playlists o canciones individuales de Spotify y videos/audio de YouTube de manera automática.
 
-Script que permite descargar musica y playlists a partir de una url de spotify, por la cual se obtienen los datos de la cancion y se descarga a traves de youtube en formato mp3 
+> [!WARNING]
+> Este proyecto utiliza librerías de terceros que pueden dejar de funcionar en cualquier momento debido a cambios en las políticas de YouTube o Spotify.
 
+**Descargo de Responsabilidad**:
+Este software es para fines educativos únicamente. Asegúrate de tener los derechos necesarios sobre el contenido que descargues.
 
+## Requisitos Previos
 
+1.  **Python 3.8+** instalado.
+2.  **Git** instalado.
+3.  **FFmpeg** instalado en tu sistema (necesario para la conversión de audio).
+    - **Linux (Debian/Ubuntu)**: `sudo apt install ffmpeg`
+    - **Windows**: [Descargar e instalar FFmpeg](https://ffmpeg.org/download.html) (y agregar al PATH).
+    - **Termux**: `pkg install ffmpeg`
 
+4.  **Cuenta de Spotify Developers**:
+    - Ve a [Spotify Dashboard](https://developer.spotify.com/dashboard/).
+    - Crea una App y obtén tu `Client ID` y `Client Secret`.
 
+## Instalación
 
-## Instalacion
+1.  Clona el repositorio:
 
-Requisitos:
-**Windows**
-* python
+    ```bash
+    git clone https://github.com/Jorge-Marco5/SpotDownloader.git
+    cd SpotDownloader
+    ```
 
-Requisitos: **Linux**
-* python3
-* git
-* ffmpeg
+2.  Instala las dependencias de Python:
 
-Resuisitos: **Android (Termux)** 
-* python3
-* git
-* ffmpeg
+    ```bash
+    pip install -r requirements.txt
+    ```
 
----
-\
-Clone el projecto en una carpeta con:
+3.  Configura tus credenciales:
+    - Crea un archivo llamado `.env` en la raíz del proyecto.
+    - Agrega tus claves de Spotify como se muestra a continuación:
 
-```bash
-  git clone url
-```
+    ```env
+    SPOTIFY_CLIENT_ID=tu_client_id_aqui
+    SPOTIFY_CLIENT_SECRET=tu_client_secret_aqui
+    YT_CODEC_AUDIO=mp3
+    YT_QUALITY_AUDIO=192
+    YT_QUALITY_VIDEO=best
+    ```
 
-## Ejemplo de uso
+## Uso
 
-Una vez dentro de la carpeta raiz del proyecto, la primera vez obtenemos los paquetes necesarios de python con:
-```bash
-  python requirements.py
-```
-* Despues de la instalacion iniciamos el programa con:
-```bash
-  python main.py
-```
-* Seleccionas si quieres descargar una playlist o una cancion
-
-```bash
-  ¿Que deseas descargar? [1 playlist| 2 cancion]: [opcion]
-```
-
-* Copias la url de tu cancion o playlist de spotify y la pegas en el programa
-
-```bash
-  Ingresa la URL de Spotify: [url]
-```
-
-* esperas la descarga y listo
+Ejecuta el script principal:
 
 ```bash
-  ¡Descarga completa!
+python3 src/main.py
 ```
 
-## ¡Importante!
+Sigue las instrucciones en pantalla para:
 
-No es necesario iniciar _requirements.py_ siempre, solo la primera vez
-
-Dentro del archivo _requirements.py_ vienen instrucciones mas detalladas para su instalacion dependiendo de tu sistema operativo
-
-Las canciones se guardan dentro de la carpeta _/music_ la cual se crea al terminar de configurar el proyecto
+1.  Descargar una playlist completa de Spotify.
+2.  Descargar una sola canción de Spotify.
+3.  Descargar audio o video desde un enlace directo de YouTube.
