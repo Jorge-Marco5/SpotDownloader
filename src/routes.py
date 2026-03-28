@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for
-from app import app
-from app.utils import obtener_info_youtube, obtener_thumbnail, descargar_audio_yt, obtener_id, obtener_formatos_video, descargar_video_yt, obtener_formatos_audio
+from src import app
+from src.utils import obtener_info_youtube, obtener_thumbnail, descargar_audio_yt, obtener_id, obtener_formatos_video, descargar_video_yt, obtener_formatos_audio
 
 @app.route("/")
 @app.route("/DYT")

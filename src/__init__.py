@@ -7,5 +7,5 @@ load_dotenv()
 
 app = Flask(__name__)
 
-from app import routes  # importa las rutas al inicializar la app
+from src import routes  # importa las rutas al inicializar la app
 

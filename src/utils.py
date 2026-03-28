@@ -1,6 +1,10 @@
 import re
 import os
+import time
 from yt_dlp import YoutubeDL
+
+# Configuración de limpieza (en segundos)
+MAX_FILE_AGE = 600  # 10 minutos
 
 def obtener_info_youtube(url):
     """
@@ -51,14 +55,40 @@ def sanitizar_nombre_archivo(nombre):
     """
     return re.sub(r'[\\/*?:"<>|]', "", nombre).strip()
 
+def limpiar_archivos_temporales():
+    """
+    Elimina archivos de las carpetas de música y video que superen MAX_FILE_AGE.
+    """
+    directorios = ["app/static/music", "app/static/videos"]
+    ahora = time.time()
+    
+    for directorio in directorios:
+        if not os.path.exists(directorio):
+            continue
+            
+        for archivo in os.listdir(directorio):
+            ruta_archivo = os.path.join(directorio, archivo)
+            # No borrar archivos ocultos o carpetas
+            if os.path.isfile(ruta_archivo) and not archivo.startswith('.'):
+                try:
+                    fecha_creacion = os.path.getmtime(ruta_archivo)
+                    if ahora - fecha_creacion > MAX_FILE_AGE:
+                        os.remove(ruta_archivo)
+                        print(f"Limpieza: Archivo eliminado -> {archivo}")
+                except Exception as e:
+                    print(f"Error al limpiar {archivo}: {e}")
+
 def descargar_audio_yt(url, format_id):
     """
     Descarga el audio de un video de YouTube dado un format_id específico y lo convierte a MP3.
+    Realiza una limpieza previa de archivos antiguos.
     
     :param url: URL del video de YouTube.
     :param format_id: ID del formato de audio seleccionado.
     :return: El nombre del archivo descargado con extensión .mp3.
     """
+    limpiar_archivos_temporales() # Ejecutar limpieza antes de una nueva descarga
+    
     titulo, _ = obtener_info_youtube(url)
     titulo_limpio = sanitizar_nombre_archivo(titulo)
     
@@ -175,11 +205,14 @@ def obtener_formatos_video(url):
 def descargar_video_yt(url, format_id):
     """
     Descarga un video de YouTube con un formato específico.
+    Realiza una limpieza previa de archivos antiguos.
     
     :param url: URL del video de YouTube.
     :param format_id: ID del formato seleccionado.
     :return: El nombre del archivo descargado con extensión .mp4.
     """
+    limpiar_archivos_temporales() # Ejecutar limpieza antes de una nueva descarga
+    
     titulo, _ = obtener_info_youtube(url)
     titulo_limpio = sanitizar_nombre_archivo(titulo)
     
